@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body{
+            color: white;
+            background-color: black;
+            height: 739px;
+
+        }
+        body>div{
+            width: 700px;
+            height: inherit;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        #show{
+            width: 700px;
+            height: 540px;
+            background-color: dimgrey;
+            box-sizing: border-box;
+            padding: 15px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        /* 评论区盒子 */
+        #textAre{
+            flex-grow: 1;
+            background-color: rgb(70,70,70);
+            position: relative;
+        }
+
+        /* 评论区 */
+        textarea{
+            resize: none;
+            outline: none;
+            font-family: "微软雅黑";
+            box-sizing: border-box;
+            padding: 5px;
+            width: 500px;
+            height: 150px;
+            position: absolute;
+            left: 90px;
+            top:40px;
+
+        }
+
+        /* 输入框 */
+        input{
+            position:absolute;
+            left: 90px;
+            top:11px;
+            outline: none;
+        }
+
+        /* 发送按钮 */
+        #send{
+            position: absolute;
+            top:160px;
+            right: 30px;
+            width: 70px;
+            background-color: skyblue;
+            transition: .5s;
+            cursor: pointer;
+        }
+        #send:hover{
+            background-color: aqua;
+        }
+
+        /* 名称文本 */
+        #textAre p{
+            position: absolute;
+            top: 9.5px;
+            left: 270px;
+        }
+
+        .comment{
+            width: 670px;
+            height: 110px;
+            background-color: black;
+            position: relative;
+            margin-bottom: 5px;
+        }   
+
+        .time{
+            position: absolute;
+            right: 0;
+            top:3px;
+        }
+
+        .comment div{
+            height: 65px;
+            overflow: hidden;
+        }
+
+        .comment button
+        {
+            position: absolute;
+            right: 0;
+            background-color: skyblue;
+            transition: .5s;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+        <div>
+                <div id="show">
+                    <div class="comment">
+                        <p>用户名</p>
+                        <p class="time">时间</p>
+                        <div>textarea默认是允许横向和纵向拉伸的，如果想要禁止textarea拉伸状态可以这样写。 禁止横向拉升 resize: vertical; 纵向拉伸 resize: horizontal。</div>
+                        <button>删除</button>
+                    </div>
+                </div>
+                <div id="textAre">
+                    <p>昵称</p>
+                    <input type="text" id="username" placeholder="输入你的昵称">
+                    <textarea placeholder="写下你自己的评论吧~"></textarea>
+                    <button id="send">发送</button>
+                </div>
+
+        </div>
+    <script>
+        //DOM对象
+        const textArea=document.querySelector("textarea");//评论输入
+        const sendBt=textArea.nextElementSibling;//发送按钮
+        const username=document.querySelector("#username")//账户名
+        const commentArea=document.getElementById("show");//评论区
+        const del=document.getElementById("show").getElementsByTagName("button");//获取所有删除按钮
+
+    
+        sendBt.addEventListener("click",function(){
+            //创建时间得到当前时间
+            const time=new Date().toLocaleTimeString();
+            //获取昵称
+            const name=username.value;
+            const userComment=textArea.value;
+            console.log(userComment);
+
+            //创建外层divclass comment 2个p标签p标签有一个class time 1个div 1个按钮
+            const divFather=document.createElement("div");
+            const pName=document.createElement("p");
+            const pTime=document.createElement("p");
+            const divComment=document.createElement("div");
+            const btDel=document.createElement("button");
+
+            //添加属性，用于css自动配置样式
+            divFather.className="comment";
+            pTime.className="time";
+            //给删除按钮添加事件响应函数
+            btDel.addEventListener("click",funDel);
+
+            //给所有元素添加文本
+            pName.innerText=name;
+            divComment.innerText=userComment;
+            pTime.innerText=time;
+            btDel.innerText="删除";
+
+            //为容器添加元素
+            divFather.append(pName);
+            divFather.append(pTime);
+            divFather.append(divComment);
+            divFather.append(btDel);
+
+            //把容器添加到评论区里面
+            commentArea.append(divFather);
+
+            //清空文本框内容
+            textArea.value='';
+            username.value=''
+        })
+
+
+
+        for(let ele of del){
+            ele.addEventListener("click",funDel);
+        }
+
+        //删除功能
+        function funDel() {
+            if(confirm("真的要删除此评论吗?"))
+            {
+                this.parentElement.remove();
+            }
+        }
+
+
+
+    </script>
+</body>
+</html>
